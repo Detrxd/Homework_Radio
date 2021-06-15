@@ -17,9 +17,9 @@ public class Radio {
         this.currentStation = currentStation;
     }
 
-    public void next() {
+    public void next(int currentStation) {
         if (currentStation == 9) {
-            currentStation = 0;
+            this.currentStation = 0;
         } else {
             this.currentStation = currentStation + 1;
         }
@@ -34,20 +34,32 @@ public class Radio {
     }
 
     // Volume //
-    public int getVolume() {
+    public int getLimitOverValueVolume() {
         return volume;
     }
 
+
     public void increaseVolume() {
-        if (volume < 10) {
+        if (limitOverValueVolume(volume)) {
+            return;
+        } else {
             volume = volume + 1;
+            ;
         }
     }
 
     public void decreaseVolume() {
-        if (volume > 0) {
-            volume = volume - 1;
+        if (limitBelowValueVolume(volume)) {
+            return;
         }
+        volume = volume - 1;
     }
 
+    public boolean limitOverValueVolume(int currentVolume) {
+        return currentVolume == 9;
+    }
+
+    public boolean limitBelowValueVolume(int currentVolume) {
+        return currentVolume == 0;
+    }
 }

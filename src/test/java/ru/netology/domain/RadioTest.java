@@ -21,10 +21,11 @@ class RadioTest {
     @Test
 //    @Disabled
     void testNextRadioStation() {
+
         assertEquals(0, service.getCurrentStation());
-        service.next();
+        service.next(0);
         assertEquals(1, service.getCurrentStation());
-        service.next();
+        service.next(1);
         assertEquals(2, service.getCurrentStation());
     }
 
@@ -38,12 +39,16 @@ class RadioTest {
     }
 
     @Test
-    void testValueVolumes() {
-        assertEquals(0, service.getVolume());
+    void testValueVolume() {
+        assertEquals(0, service.getLimitOverValueVolume());
         service.decreaseVolume();
-        assertEquals(0, service.getVolume());
+        assertEquals(0, service.getLimitOverValueVolume());
         service.increaseVolume();
-        assertEquals(1, service.getVolume());
+        assertEquals(1, service.getLimitOverValueVolume());
+        service.decreaseVolume();
+        assertEquals(0, service.getLimitOverValueVolume());
+        service.increaseVolume();
+        assertEquals(1, service.getLimitOverValueVolume());
     }
 
     @Test
@@ -51,7 +56,26 @@ class RadioTest {
         int maxValue = 1;
         for (maxValue = 1; maxValue < 10; maxValue = maxValue + 1) {
         }
-        service.getVolume();
+        service.getLimitOverValueVolume();
         assertEquals(10, maxValue);
+    }
+
+    @Test
+    void testOverLimitRadioStation() {
+        int radioStation = 1;
+        for (radioStation = 1; radioStation < 9; radioStation = radioStation + 1) {
+        }
+        service.next(9);        // Вероятнее всего так делать неправильно, подскажите, пожалуйста как приравнять значение radioStation к currentStation`y
+        assertEquals(0, service.getCurrentStation());
+    }
+
+    @Test
+    void VolumeTest() {
+        int i = 0;
+        while (i < 10) {
+            service.increaseVolume();
+            i++;
+        }
+        assertEquals(9, service.getLimitOverValueVolume());
     }
 }
