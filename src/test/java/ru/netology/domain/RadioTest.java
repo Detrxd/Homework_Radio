@@ -38,11 +38,16 @@ class RadioTest {
         assertEquals(8, service.getCurrentStation());
     }
 
-    @Test
-    void testValueVolume() {
+    @Test //Проверка того, что значение не уходит за нижний лимит
+    void ValueVolumeDownUnderLimit() {
         assertEquals(0, service.getLimitOverValueVolume());
         service.decreaseVolume();
         assertEquals(0, service.getLimitOverValueVolume());
+        service.increaseVolume();
+    }
+
+    @Test //Проверка повышения,а затем понижения звука
+    void ValueVolumeUp() {
         service.increaseVolume();
         assertEquals(1, service.getLimitOverValueVolume());
         service.decreaseVolume();
@@ -62,8 +67,9 @@ class RadioTest {
 
     @Test
     void testOverLimitRadioStation() {
-        int radioStation = 1;
+        int radioStation;
         for (radioStation = 1; radioStation < 9; radioStation = radioStation + 1) {
+                radioStation=9;
         }
         service.next(9);        // Вероятнее всего так делать неправильно, подскажите, пожалуйста как приравнять значение radioStation к currentStation`y
         assertEquals(0, service.getCurrentStation());
