@@ -20,22 +20,25 @@ class RadioTest {
 
     @Test
 //    @Disabled
-    void testNextRadioStation() {
-
+    void testNextRadioStation() { //Проверка переключения станции на +1
         assertEquals(0, service.getCurrentStation());
         service.next(0);
         assertEquals(1, service.getCurrentStation());
-        service.next(1);
-        assertEquals(2, service.getCurrentStation());
+
     }
 
     @Test
-    void previousRadioStation() {
+    void previousRadioStation() { // Проверка переключения радиостанции в обратном порядке, начиная с 0
         assertEquals(0, service.getCurrentStation());
         service.prev();
         assertEquals(9, service.getCurrentStation());
+    }
+    @Test
+    void downgradeRadioStation (){ // Проверка переключения радиостанции на 1 шаг
+        service.setCurrentStation(5);
+        assertEquals(5, service.getCurrentStation());
         service.prev();
-        assertEquals(8, service.getCurrentStation());
+        assertEquals(4, service.getCurrentStation());
     }
 
     @Test //Проверка того, что значение не уходит за нижний лимит
@@ -52,8 +55,7 @@ class RadioTest {
         assertEquals(1, service.getLimitOverValueVolume());
         service.decreaseVolume();
         assertEquals(0, service.getLimitOverValueVolume());
-        service.increaseVolume();
-        assertEquals(1, service.getLimitOverValueVolume());
+
     }
 
     @Test
