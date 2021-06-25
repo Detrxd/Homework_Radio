@@ -24,6 +24,16 @@ class RadioTest {
         assertEquals(80, service.getMaxCurrentStation());
     }
 
+    @Test//
+    public void checkLimitStation(){ // Проверка того, что значение не выходит за максимум.
+        Radio radio = new Radio(5);
+        radio.setCurrentStation(5);
+        radio.nextRadioStation();
+        assertEquals(0,radio.getCurrentStation());
+
+
+    }
+
     @Test
     // Переключение радиостанции на +1
     public void upRadioStation() {
@@ -131,15 +141,5 @@ class RadioTest {
         assertEquals(0, radio.getCurrentVolume());
     }
 
-    @Test
-    public void fillInTheGaps() {
-        Radio radio = new Radio(9, 3, 0, 10, 0, 100);
-        assertEquals(9, radio.getCurrentVolume());
-        assertEquals(3, radio.getCurrentStation());
-        assertEquals(0, radio.getMinCurrentStation());
-        assertEquals(10, radio.getMaxCurrentStation());
-        assertEquals(0, radio.getMinCurrentVolume());
-        assertEquals(100, radio.getMaxCurrentVolume());
-    }
 
 }
