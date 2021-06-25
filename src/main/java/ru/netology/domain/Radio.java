@@ -2,64 +2,99 @@ package ru.netology.domain;
 
 public class Radio {
     private int currentStation;
-    private int volume;
+    private int minCurrentStation = 0;
+    private int maxCurrentStation = 10;
+    private int currentVolume;
+    private int maxCurrentVolume = 100;
+    private int minCurrentVolume = 0;
 
-    // Radio //
+
+    public Radio() {
+    }
+
+    public Radio(int currentStation) {
+        this.maxCurrentStation = currentStation;
+    }
+
+    public int getMinCurrentStation() {
+        return minCurrentStation;
+    }
+
+    public int getMaxCurrentStation() {
+        return maxCurrentStation;
+    }
+
     public int getCurrentStation() {
         return currentStation;
     }
 
-    public void setCurrentStation(int currentStation) {
-        if (currentStation <= 0)
-            return;
-        if (currentStation >= 9)
-            return;
+    public int getCurrentVolume() {
+        return currentVolume;
+    }
+
+    public int getMaxCurrentVolume() {
+        return maxCurrentVolume;
+    }
+
+    public int getMinCurrentVolume() {
+        return minCurrentVolume;
+    }
+
+    //Stations//
+
+    public void setCurrentStation(int currentStation) { //Установить станцию
+
+        if (currentStation < minCurrentStation) {
+            currentStation = minCurrentStation;
+        }
+        if (currentStation > maxCurrentStation) {
+            currentStation = maxCurrentStation;
+        }
         this.currentStation = currentStation;
     }
 
-    public void next(int currentStation) {
-        if (currentStation == 9) {
-            this.currentStation = 0;
-        } else {
-            this.currentStation = currentStation + 1;
+    public int nextRadioStation() { //Шаг вперёд на 1
+
+        if (currentStation >= maxCurrentStation) {
+            currentStation = minCurrentStation;
+            return minCurrentStation;
         }
+        currentStation++;
+
+        return currentStation;
     }
 
-    public void prev() {
-        if (currentStation == 0) {
-            currentStation = 9;
-        } else {
-            this.currentStation = currentStation - 1;
+    public int previousRadioStation() { //Шаг назад на 1
+        if (currentStation <= minCurrentStation) {
+            currentStation = maxCurrentStation;
+            return maxCurrentStation;
         }
+        this.currentStation--;
+        return currentStation;
     }
 
-    // Volume //
-    public int getLimitOverValueVolume() {
-        return volume;
+    public void setCurrentVolume(int currentVolume) {
+        if (currentVolume > maxCurrentVolume) {
+            currentVolume = maxCurrentVolume;
+        }
+        if (currentVolume < minCurrentVolume) {
+            currentVolume = minCurrentVolume;
+        }
+        this.currentVolume = currentVolume;
     }
 
-
-    public void increaseVolume() {
-        if (limitOverValueVolume(volume)) {
+    public void nextVolume() {
+        if (currentVolume >= maxCurrentVolume) {
             return;
-        } else {
-            volume = volume + 1;
-            ;
         }
+        this.currentVolume++;
     }
 
-    public void decreaseVolume() {
-        if (limitBelowValueVolume(volume)) {
+    public void previousVolume() {
+        if (currentVolume <= minCurrentVolume) {
             return;
         }
-        volume = volume - 1;
-    }
-
-    public boolean limitOverValueVolume(int currentVolume) {
-        return currentVolume == 9;
-    }
-
-    public boolean limitBelowValueVolume(int currentVolume) {
-        return currentVolume == 0;
+        currentVolume--;
     }
 }
+    // ОСТАНОВИЛСЯ НА НАПИСАНИИ АВТОТЕСТОВ. C классом, наверное, закончил //
