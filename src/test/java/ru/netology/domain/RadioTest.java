@@ -118,9 +118,9 @@ class RadioTest {
     @Test
     void increaseVolumeBelowLimit1() {
         Radio radio = new Radio();
-    radio.setCurrentVolume(-1);
-    radio.previousVolume();
-    assertEquals(0,radio.getCurrentVolume());
+        radio.setCurrentVolume(-1);
+        radio.previousVolume();
+        assertEquals(0, radio.getCurrentVolume());
     }
 
     @Test
@@ -131,5 +131,15 @@ class RadioTest {
         assertEquals(0, radio.getCurrentVolume());
     }
 
+    @Test
+    public void fillInTheGaps() {
+        Radio radio = new Radio(9, 3, 0, 10, 0, 100);
+        assertEquals(9, radio.getCurrentVolume());
+        assertEquals(3, radio.getCurrentStation());
+        assertEquals(0, radio.getMinCurrentStation());
+        assertEquals(10, radio.getMaxCurrentStation());
+        assertEquals(0, radio.getMinCurrentVolume());
+        assertEquals(100, radio.getMaxCurrentVolume());
+    }
 
 }
