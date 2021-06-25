@@ -5,95 +5,131 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RadioTest {
-    Radio service = new Radio();
 
     @Test
-    public void testCurrentStation() {
-        service.setCurrentStation(100);
-        assertEquals(100, service.getCurrentStation());
+    public void fieldParametrs() {
+        Radio radio = new Radio();
+        assertEquals(10, radio.getMaxCurrentStation());
+        assertEquals(0, radio.getMinCurrentStation());
+        assertEquals(0, radio.getCurrentStation());
+        assertEquals(100, radio.getMaxCurrentVolume());
+        assertEquals(0, radio.getMinCurrentVolume());
+        assertEquals(0, radio.getCurrentVolume());
     }
-    @Test
-    public void testMaxMinValueLimits(){
-        service.setCurrentStation(-1);
-        assertEquals(10,service.getCurrentStation());
-        service.setCurrentStation(120);
-        assertEquals(10,service.getCurrentStation());
-    }
-    @Test
-//    @Disabled
-    public void testLimitStation() {
-        service.setCurrentStation(0);
-        assertEquals(0, service.getCurrentStation());
-        service.setCurrentStation(100);
-        assertEquals(100, service.getCurrentStation());
+
+
+    @Test // Установка максимального значения радиостанции
+    public void setRadioMaxStation() {
+        Radio service = new Radio(80);
+        assertEquals(80, service.getMaxCurrentStation());
     }
 
     @Test
-//    @Disabled
-    void testNextRadioStation() { //Проверка переключения станции на +1
-        service.next(13);
-        assertEquals(14,service.getCurrentStation());
-        service.next(100);
-        assertEquals(0, service.getCurrentStation());
-
+    // Переключение радиостанции на +1
+    public void upRadioStation() {
+        Radio radio = new Radio();
+        radio.setCurrentStation(9);
+        radio.nextRadioStation();
+        assertEquals(10, radio.getCurrentStation());
     }
 
     @Test
-    void previousRadioStation() { // Проверка переключения радиостанции в обратном порядке, начиная с 0
-        service.setCurrentStation(0);
-        assertEquals(0, service.getCurrentStation());
-        service.prev();
-        assertEquals(100, service.getCurrentStation());
+    // Переключение радиостанции на +1 при достижении лимита в 10.
+    public void nextRadioStationOverLimit() {
+        Radio radio = new Radio();
+        radio.setCurrentStation(10);
+        radio.nextRadioStation();
+        assertEquals(0, radio.getCurrentStation());
     }
 
     @Test
-    void downgradeRadioStation() { // Проверка переключения радиостанции на 1 шаг
-        service.setCurrentStation(5);
-        assertEquals(5, service.getCurrentStation());
-        service.prev();
-        assertEquals(4, service.getCurrentStation());
+    public void nextRadioStationOverLimit1() { //Переключение радиостанции сверх лимита
+        Radio radio = new Radio();
+        radio.setCurrentStation(11);
+        radio.nextRadioStation();
+        assertEquals(0, radio.getCurrentStation());
     }
 
     @Test
-        //Проверка того, что значение не уходит за нижний лимит
-    void ValueVolumeDownUnderLimit() {
-        assertEquals(0, service.getLimitOverValueVolume());
-        service.decreaseVolume();
-        assertEquals(0, service.getLimitOverValueVolume());
-        service.increaseVolume();
+    public void previousRadioStation() { // Убавляем станцию на 1 шаг
+        Radio radio = new Radio();
+        radio.setCurrentStation(4);
+        radio.previousRadioStation();
+        assertEquals(3, radio.getCurrentStation());
     }
 
     @Test
-        //Проверка повышения,а затем понижения звука
-    void ValueVolumeUp() {
-        service.increaseVolume();
-        assertEquals(1, service.getLimitOverValueVolume());
-        service.decreaseVolume();
-        assertEquals(0, service.getLimitOverValueVolume());
-
+    public void previousRadioStationNearLimit() { // Убавляем станцию на 1, когда текущая 0
+        Radio radio = new Radio();
+        radio.setCurrentStation(0);
+        radio.previousRadioStation();
+        assertEquals(10, radio.getCurrentStation());
     }
 
     @Test
-    void testLimitVolume() {
-        int maxValue = 1;
-        for (maxValue = 1; maxValue < 100; maxValue = maxValue + 1) {
-        }
-        service.getLimitOverValueVolume();
-        assertEquals(100, maxValue);
+
+    public void previousRadioStationNearLimit1() { // Убавляем станцию на 1, когда текущая -1
+        Radio radio = new Radio();
+        radio.setCurrentStation(-1);
+        radio.previousRadioStation();
+        assertEquals(10, radio.getCurrentStation());
+    }
+
+    //Volume//
+    @Test
+    public void setVolume() { // Установка громкости на 50
+        Radio radio = new Radio();
+        radio.setCurrentVolume(50);
+        assertEquals(50, radio.getCurrentVolume());
     }
 
     @Test
-    void VolumeTest() {
-        int i = 0;
-        while (i <= 100) {
-            service.increaseVolume();
-            i++;
-        }
-        assertEquals(100, service.getLimitOverValueVolume());
+    public void upCurrentVolume() {
+        Radio radio = new Radio();
+        radio.setCurrentVolume(50);
+        radio.nextVolume();
+        assertEquals(51, radio.getCurrentVolume());
     }
 
     @Test
-    public void Radio() {
-        assertEquals(10, service.getCurrentStation());
+    public void upCurrentVolumeOverLimit() {
+        Radio radio = new Radio();
+        radio.setCurrentVolume(100);
+        radio.nextVolume();
+        assertEquals(100, radio.getCurrentVolume());
     }
+
+    @Test
+    public void upCurrentVolumeOverLimit1() {
+        Radio radio = new Radio();
+        radio.setCurrentVolume(102);
+        radio.nextVolume();
+        assertEquals(100, radio.getCurrentVolume());
+    }
+
+    @Test
+    void increaseVolume() {
+        Radio radio = new Radio();
+        radio.setCurrentVolume(5);
+        radio.previousVolume();
+        assertEquals(4, radio.getCurrentVolume());
+    }
+
+    @Test
+    void increaseVolumeBelowLimit1() {
+        Radio radio = new Radio();
+    radio.setCurrentVolume(-1);
+    radio.previousVolume();
+    assertEquals(0,radio.getCurrentVolume());
+    }
+
+    @Test
+    public void increaseVolumeBelowLimit() {
+        Radio radio = new Radio();
+        radio.setCurrentStation(-1);
+        radio.previousVolume();
+        assertEquals(0, radio.getCurrentVolume());
+    }
+
+
 }
